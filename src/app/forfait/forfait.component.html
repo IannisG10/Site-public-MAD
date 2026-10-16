@@ -1,0 +1,72 @@
+<section class="ff">
+  <!-- ======================= Forfait actuel ======================= -->
+  @if (currentPlan(); as cur) {
+    <div class="ff-current">
+      <div class="ff-current__info">
+        <span class="ff-current__label">Votre forfait</span>
+        <p class="ff-current__plan"><lucide-icon name="star" [size]="18" />{{ cur.name }}</p>
+        <p class="lb-muted">Renouvellement le {{ renewal }}.</p>
+      </div>
+      <button type="button" class="lb-btn lb-btn--ghost lb-btn--auto">Gérer mon abonnement</button>
+    </div>
+  }
+
+  <!-- ======================= En-tête + bascule facturation ======================= -->
+  <header class="ff-head">
+    <div>
+      <h1 class="ff-head__title">Choisissez votre forfait</h1>
+      <p class="lb-muted">Changez ou mettez à niveau à tout moment. Sans engagement.</p>
+    </div>
+
+    <div class="ff-billing" role="group" aria-label="Période de facturation">
+      <button type="button" class="ff-billing__btn" [class.is-on]="billing() === 'mensuel'" [attr.aria-pressed]="billing() === 'mensuel'" (click)="setBilling('mensuel')">Mensuel</button>
+      <button type="button" class="ff-billing__btn" [class.is-on]="billing() === 'annuel'" [attr.aria-pressed]="billing() === 'annuel'" (click)="setBilling('annuel')">
+        Annuel <span class="ff-billing__save">−20 %</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ======================= Offres ======================= -->
+  <div class="ff-plans">
+    @for (p of plans; track p.id) {
+      <article class="ff-plan" [class.is-reco]="p.recommended" [class.is-current]="isCurrent(p)">
+        @if (p.recommended) {
+          <span class="ff-plan__flag"><lucide-icon name="sparkles" [size]="13" />Recommandé</span>
+        }
+
+        <h2 class="ff-plan__name">{{ p.name }}</h2>
+        <p class="ff-plan__tagline">{{ p.tagline }}</p>
+
+        <p class="ff-plan__price">
+          <strong>{{ priceFor(p) }}</strong>
+          @if (p.monthly > 0) { <span class="ff-plan__per">/ mois</span> }
+        </p>
+        @if (p.monthly > 0 && billing() === 'annuel') {
+          <p class="ff-plan__annual">soit {{ annualTotal(p) }}</p>
+        } @else if (p.monthly > 0) {
+          <p class="ff-plan__annual ff-plan__annual--hint">Économisez 20 % en annuel</p>
+        }
+
+        @if (isCurrent(p)) {
+          <button type="button" class="lb-btn lb-btn--ghost" disabled>Forfait actuel</button>
+        } @else if (p.recommended) {
+          <button type="button" class="lb-btn lb-btn--primary">Passer au {{ p.name }}</button>
+        } @else {
+          <button type="button" class="lb-btn lb-btn--secondary">Choisir {{ p.name }}</button>
+        }
+
+        <ul class="ff-features">
+          @for (f of p.features; track f.label) {
+            <li [class.is-off]="!f.included">
+              <lucide-icon [name]="f.included ? 'check' : 'x'" [size]="15" />{{ f.label }}
+            </li>
+          }
+        </ul>
+      </article>
+    }
+  </div>
+
+  <p class="ff-foot lb-muted">
+    Paiement sécurisé · Résiliable à tout moment · Les prix sont indiqués TTC.
+  </p>
+</section>

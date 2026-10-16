@@ -1,0 +1,84 @@
+<section class="mo">
+  <!-- ======================= En-tête : présence en direct ======================= -->
+  <header class="mo-hero">
+    <div class="mo-hero__headline">
+      <span class="mo-live"><span class="mo-live__dot" aria-hidden="true"></span>En direct</span>
+      <p class="mo-hero__stat"><strong>{{ onlineTotal }}</strong> membres en ligne maintenant</p>
+      <p class="lb-muted">Ils sont connectés en ce moment — prenez contact tant qu'ils sont là.</p>
+    </div>
+
+    <!-- Filtres rapides (présence). La recherche fine se fait dans « Recherche ». -->
+    <div class="mo-controls">
+      <div class="mo-segment" role="group" aria-label="Filtrer par">
+        @for (o of sexeOptions; track o.value) {
+          <button
+            type="button"
+            class="mo-segment__btn"
+            [class.is-on]="sexe() === o.value"
+            [attr.aria-pressed]="sexe() === o.value"
+            (click)="setSexe(o.value)"
+          >{{ o.label }}</button>
+        }
+      </div>
+      <label class="lb-check">
+        <input type="checkbox" [checked]="withPhoto()" (change)="withPhoto.set($any($event.target).checked)" /> Avec photo
+      </label>
+      <a routerLink="/recherche" class="mo-advanced"><lucide-icon name="search" [size]="15" />Recherche avancée</a>
+    </div>
+  </header>
+
+  <!-- ======================= Viennent d'arriver ======================= -->
+  @if (justArrived().length) {
+    <section class="mo-block">
+      <h2 class="mo-block__title">Viennent d'arriver <span class="mo-block__count">{{ justArrived().length }}</span></h2>
+      <ul class="mo-grid">
+        @for (m of justArrived(); track m.pseudo) {
+          <li class="mo-card mo-card--fresh">
+            <div class="mo-card__media">
+              <span class="mo-card__ph" [class.is-f]="m.sex === 'f'" [class.is-nophoto]="!m.hasPhoto">
+                @if (m.hasPhoto) { {{ initials(m.pseudo) }} } @else { <lucide-icon name="user" [size]="22" /> }
+              </span>
+              <span class="mo-card__dot" title="En ligne"></span>
+            </div>
+            <div class="mo-card__body">
+              <a href="#" class="mo-card__name">{{ m.pseudo }}</a>
+              <p class="mo-card__meta">{{ m.age }} ans · {{ m.city }} <span class="mo-card__dept">({{ m.dept }})</span></p>
+              <p class="mo-card__since">{{ since(m.since) }}</p>
+              <button type="button" class="lb-btn lb-btn--sm lb-btn--auto"><lucide-icon name="mail" [size]="14" />Contacter</button>
+            </div>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+  <!-- ======================= Autres membres en ligne ======================= -->
+  <section class="mo-block">
+    <h2 class="mo-block__title">En ligne <span class="mo-block__count">{{ visibleCount() }}</span></h2>
+    @if (others().length) {
+      <ul class="mo-grid">
+        @for (m of others(); track m.pseudo) {
+          <li class="mo-card">
+            <div class="mo-card__media">
+              <span class="mo-card__ph" [class.is-f]="m.sex === 'f'" [class.is-nophoto]="!m.hasPhoto">
+                @if (m.hasPhoto) { {{ initials(m.pseudo) }} } @else { <lucide-icon name="user" [size]="22" /> }
+              </span>
+              <span class="mo-card__dot" title="En ligne"></span>
+            </div>
+            <div class="mo-card__body">
+              <a href="#" class="mo-card__name">{{ m.pseudo }}</a>
+              <p class="mo-card__meta">{{ m.age }} ans · {{ m.city }} <span class="mo-card__dept">({{ m.dept }})</span></p>
+              <p class="mo-card__since">{{ since(m.since) }}</p>
+              <button type="button" class="lb-btn lb-btn--sm lb-btn--auto"><lucide-icon name="mail" [size]="14" />Contacter</button>
+            </div>
+          </li>
+        }
+      </ul>
+    } @else {
+      <div class="mo-empty">
+        <p class="lb-muted">Personne ne correspond à ce filtre pour l'instant.</p>
+        <button type="button" class="lb-btn lb-btn--ghost lb-btn--sm lb-btn--auto" (click)="setSexe('all')">Voir tout le monde</button>
+      </div>
+    }
+  </section>
+</section>

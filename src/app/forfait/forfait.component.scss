@@ -1,0 +1,240 @@
+/* =========================================================
+   Mon forfait — forfait actuel + comparatif d'offres.
+   Hiérarchie : l'offre recommandée est visuellement élevée (liseré accent,
+   badge, légère surélévation) ; une seule action primaire. Bascule de
+   facturation en progressive disclosure. Design éditorial.
+   ========================================================= */
+:host {
+  display: block;
+  padding-bottom: var(--space-6);
+}
+
+/* ===================== Forfait actuel ===================== */
+.ff-current {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-6);
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--border));
+  border-radius: var(--radius-lg);
+}
+.ff-current__label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.ff-current__plan {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 2px 0 2px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.ff-current__plan lucide-icon {
+  color: var(--accent);
+}
+.ff-current .lb-muted {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+/* ===================== En-tête + facturation ===================== */
+.ff-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-6);
+}
+.ff-head__title {
+  margin: 0 0 2px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--primary-strong);
+}
+.ff-head .lb-muted {
+  margin: 0;
+  font-size: 0.9rem;
+}
+.ff-billing {
+  display: inline-flex;
+  padding: 3px;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+}
+.ff-billing__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.45rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.ff-billing__btn.is-on {
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+}
+.ff-billing__save {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--success);
+}
+
+/* ===================== Offres ===================== */
+.ff-plans {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+.ff-plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+/* Offre recommandée : élevée dans la hiérarchie visuelle. */
+.ff-plan.is-reco {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), var(--shadow-2);
+  transform: translateY(-6px);
+}
+.ff-plan__flag {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 11px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--on-accent);
+  background: var(--accent);
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+.ff-plan__name {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--primary-strong);
+}
+.ff-plan__tagline {
+  margin: var(--space-1) 0 var(--space-4);
+  font-size: 0.86rem;
+  color: var(--muted);
+  min-height: 2.4em;
+}
+.ff-plan__price {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+.ff-plan__price strong {
+  font-family: var(--font-brand);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.ff-plan__per {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.ff-plan__annual {
+  margin: 3px 0 var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--success);
+}
+.ff-plan__annual--hint {
+  color: var(--muted);
+}
+.ff-plan .lb-btn {
+  width: 100%;
+  margin-bottom: var(--space-4);
+}
+.ff-plan .lb-btn[disabled] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Fonctionnalités */
+.ff-features {
+  list-style: none;
+  margin: auto 0 0;
+  padding: var(--space-4) 0 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.ff-features li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+.ff-features li lucide-icon {
+  flex: none;
+  color: var(--success);
+}
+.ff-features li.is-off {
+  color: var(--muted);
+}
+.ff-features li.is-off lucide-icon {
+  color: var(--border-strong);
+}
+
+.ff-foot {
+  margin: var(--space-6) 0 0;
+  text-align: center;
+  font-size: 0.82rem;
+}
+
+/* ===================== Responsive ===================== */
+@media (max-width: 860px) {
+  .ff-plans {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  .ff-plan.is-reco {
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ff-plan.is-reco {
+    transform: none;
+  }
+}

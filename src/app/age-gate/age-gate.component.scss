@@ -1,0 +1,136 @@
+.age-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: var(--space-5) var(--space-4);
+  overflow: auto;
+  /* fond opaque : masque entièrement le site derrière la porte */
+  background:
+    radial-gradient(120% 120% at 50% 0%, var(--bg-elev) 0%, var(--bg) 60%);
+}
+
+.age-gate__panel {
+  width: 100%;
+  max-width: 460px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.age-gate__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+  margin: 0 0 var(--space-3);
+}
+.age-gate__eyebrow--deny {
+  color: var(--danger);
+}
+
+h1 {
+  font-size: 1.6rem;
+  margin: 0 0 var(--space-3);
+}
+
+.age-gate__lead {
+  color: var(--muted);
+  margin: 0 auto var(--space-5);
+  max-width: 40ch;
+}
+
+.age-gate__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  text-align: left;
+  margin-bottom: var(--space-5);
+}
+.age-gate__field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.age-gate__field select {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  appearance: none;
+  cursor: pointer;
+}
+.age-gate__field select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+.age-gate__choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.age-gate__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.75rem 1.4rem;
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+/* Action primaire — chemin légitime : indigo plein (froid = confiance). */
+.age-gate__btn--primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.age-gate__btn--primary:hover:not(:disabled) {
+  background: var(--accent-strong);
+}
+.age-gate__btn--primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Action négative — « moins de 18 ans » : rouge contour = stop/accès refusé,
+   teinte nettement distincte de l'indigo, poids visuel moindre que l'entrée. */
+.age-gate__btn--deny {
+  background: transparent;
+  color: var(--danger);
+  border-color: var(--danger);
+}
+.age-gate__btn--deny:hover {
+  background: var(--danger-weak);
+}
+
+.age-gate__btn--ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.age-gate__btn--ghost:hover {
+  border-color: var(--text);
+}
+
+.age-gate__note {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin: var(--space-4) 0 0;
+}

@@ -1,0 +1,141 @@
+<section class="pf">
+  <!-- ======================= Identité (colonne latérale, sticky) ======================= -->
+  <aside class="pf-id">
+    <div class="pf-id__avatarwrap">
+      <span class="pf-id__avatar" [class.is-f]="sex === 'f'">{{ initials(pseudo) }}</span>
+      <span class="pf-id__status" [class.is-online]="online()" [class.is-offline]="!online()">
+        {{ online() ? 'En ligne' : 'Hors ligne' }}
+      </span>
+    </div>
+
+    <div class="pf-id__head">
+      <h1 class="pf-id__name">{{ pseudo }}</h1>
+      @if (subscriber) {
+        <span class="pf-badge"><lucide-icon name="star" [size]="13" />{{ plan }}</span>
+      }
+    </div>
+    <p class="pf-id__meta">
+      <span>{{ age }} ans</span>
+      <span class="pf-id__sep">·</span>
+      <span><lucide-icon name="map-pin" [size]="14" />{{ city }} ({{ dept }})</span>
+    </p>
+    <p class="pf-id__since"><lucide-icon name="calendar" [size]="14" />Membre depuis {{ memberSince }}</p>
+
+    <button type="button" class="lb-btn lb-btn--primary pf-id__edit">
+      <lucide-icon name="pencil" [size]="16" />Modifier mon profil
+    </button>
+
+    <!-- Interrupteur de présence -->
+    <button
+      type="button"
+      class="pf-toggle"
+      role="switch"
+      [attr.aria-checked]="online()"
+      (click)="toggleOnline()"
+    >
+      <span class="pf-toggle__track" [class.is-on]="online()"><span class="pf-toggle__knob"></span></span>
+      <span class="pf-toggle__label">Apparaître en ligne</span>
+    </button>
+
+    <!-- Stats rapides -->
+    <ul class="pf-stats">
+      <li>
+        <lucide-icon name="eye" [size]="16" />
+        <strong>{{ stats.views | number }}</strong>
+        <span>vues</span>
+      </li>
+      <li>
+        <lucide-icon name="mail" [size]="16" />
+        <strong>{{ stats.contacts }}</strong>
+        <span>contacts</span>
+      </li>
+      <li>
+        <lucide-icon name="heart" [size]="16" />
+        <strong>{{ stats.favorites }}</strong>
+        <span>favoris</span>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- ======================= Contenu ======================= -->
+  <main class="pf-main">
+    <!-- Complétude : progressive disclosure, guide vers les éléments manquants -->
+    @if (completion() < 100) {
+      <section class="pf-complete">
+        <div class="pf-complete__top">
+          <div>
+            <h2 class="pf-complete__title">Complétez votre profil</h2>
+            <p class="lb-muted">Un profil complet reçoit bien plus de visites.</p>
+          </div>
+          <span class="pf-complete__pct">{{ completion() }}%</span>
+        </div>
+        <div class="pf-bar" [attr.aria-valuenow]="completion()" aria-valuemin="0" aria-valuemax="100" role="progressbar">
+          <span class="pf-bar__fill" [style.width.%]="completion()"></span>
+        </div>
+        <ul class="pf-checklist">
+          @for (item of completionItems; track item.label) {
+            <li [class.is-done]="item.done">
+              <lucide-icon [name]="item.done ? 'check' : 'plus'" [size]="14" />{{ item.label }}
+            </li>
+          }
+        </ul>
+        @if (nextStep()) {
+          <button type="button" class="lb-btn lb-btn--secondary lb-btn--auto pf-complete__cta">
+            <lucide-icon name="plus" [size]="15" />{{ nextStep() }}
+          </button>
+        }
+      </section>
+    }
+
+    <!-- À propos de moi -->
+    <section class="pf-section">
+      <header class="pf-section__head">
+        <h2 class="pf-section__title">À propos de moi</h2>
+        <button type="button" class="pf-edit" aria-label="Modifier la description"><lucide-icon name="pencil" [size]="15" /></button>
+      </header>
+      <p class="pf-tagline">{{ tagline }}</p>
+      <p class="pf-bio">{{ bio }}</p>
+    </section>
+
+    <!-- Ce que je recherche -->
+    <section class="pf-section">
+      <header class="pf-section__head">
+        <h2 class="pf-section__title">Ce que je recherche</h2>
+        <button type="button" class="pf-edit" aria-label="Modifier mes préférences"><lucide-icon name="pencil" [size]="15" /></button>
+      </header>
+      <ul class="pf-chips">
+        @for (p of lookingFor; track p) { <li class="pf-chip pf-chip--accent">{{ p }}</li> }
+      </ul>
+    </section>
+
+    <!-- Centres d'intérêt -->
+    <section class="pf-section">
+      <header class="pf-section__head">
+        <h2 class="pf-section__title">Centres d'intérêt</h2>
+        <button type="button" class="pf-edit" aria-label="Modifier mes centres d'intérêt"><lucide-icon name="pencil" [size]="15" /></button>
+      </header>
+      <ul class="pf-chips">
+        @for (i of interests; track i) { <li class="pf-chip">{{ i }}</li> }
+      </ul>
+    </section>
+
+    <!-- Mes photos -->
+    <section class="pf-section">
+      <header class="pf-section__head">
+        <h2 class="pf-section__title">Mes photos</h2>
+        <button type="button" class="lb-btn lb-btn--ghost lb-btn--sm lb-btn--auto"><lucide-icon name="camera" [size]="15" />Gérer</button>
+      </header>
+      <ul class="pf-photos">
+        @for (ph of photos; track ph) {
+          <li class="pf-photo" [class.is-cover]="ph === 1">
+            <span class="pf-photo__ph">{{ initials(pseudo) }}</span>
+            @if (ph === 1) { <span class="pf-photo__tag">Principale</span> }
+          </li>
+        }
+        <li class="pf-photo pf-photo--add">
+          <button type="button" aria-label="Ajouter une photo"><lucide-icon name="plus" [size]="22" /><span>Ajouter</span></button>
+        </li>
+      </ul>
+    </section>
+  </main>
+</section>

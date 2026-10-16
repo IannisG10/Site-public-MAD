@@ -1,0 +1,174 @@
+<!-- ===================== Corps : composition bento 12 colonnes (accueil) ===================== -->
+<div class="lb-grid">
+    <!-- Bento 12 colonnes : la hiérarchie des usages dicte la composition.
+         Bande 1 : recherche (7) dominante + inscription/connexion (5) empilées.
+         Bande 2 : membres en ligne (8) + communauté (4).
+         Bande 3 : contenu tertiaire, volontairement plus discret. -->
+    <div class="lb-bento">
+      <!-- HÉROS : recherche rapide (action prioritaire, grande tuile) -->
+      <section class="lb-tile lb-tile--search lb-hero lb-panel lb-search">
+        <header class="lb-panel__h"><lucide-icon name="search" [size]="22" class="lb-h-ico" />Recherche rapide</header>
+        <div class="lb-panel__b">
+          <div class="lb-search__grid">
+            <label class="lb-field">
+              <span>Vous cherchez</span>
+              <select>
+                @for (o of lookingForOptions; track o) { <option>{{ o }}</option> }
+              </select>
+            </label>
+            <label class="lb-field">
+              <span>Vous êtes</span>
+              <select>
+                @for (o of youAreOptions; track o) { <option>{{ o }}</option> }
+              </select>
+            </label>
+            <label class="lb-field lb-field--wide">
+              <span>Zone géographique</span>
+              <select>
+                @for (o of zoneOptions; track o) { <option>{{ o }}</option> }
+              </select>
+            </label>
+          </div>
+          <label class="lb-check lb-check--inline">
+            <input type="checkbox" /> Avec photo
+          </label>
+          <div class="lb-search__actions">
+            <a routerLink="/recherche" class="lb-btn lb-btn--primary lb-btn--lg">
+              <lucide-icon name="search" [size]="18" />Rechercher des membres
+            </a>
+            <a routerLink="/recherche" class="lb-link-quiet">Recherche avancée</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Conversion : nouveau visiteur (inscription) — action secondaire -->
+      <section class="lb-tile lb-tile--signup">
+        <h3 class="lb-tile__title">Nouveau sur IziContact ?</h3>
+        <p class="lb-muted">Découvrez la communauté et créez votre profil gratuitement.</p>
+        <button type="button" class="lb-btn lb-btn--secondary">
+          <lucide-icon name="user-plus" [size]="16" />Créer mon compte
+        </button>
+      </section>
+
+      <!-- Conversion : membre existant (connexion) — action discrète -->
+      <section class="lb-tile lb-tile--login lb-login">
+        <h3 class="lb-tile__title">Déjà membre ?</h3>
+        <p class="lb-muted">Connectez-vous à votre espace.</p>
+        <form class="lb-login__form" (submit)="$event.preventDefault()">
+          <label>
+            <span>Identifiant</span>
+            <input type="text" name="pseudo" autocomplete="username" />
+          </label>
+          <label>
+            <span>Mot de passe</span>
+            <input type="password" name="password" autocomplete="current-password" />
+          </label>
+          <div class="lb-login__actions">
+            <label class="lb-check">
+              <input type="checkbox" /> Se souvenir
+            </label>
+            <button type="submit" class="lb-btn lb-btn--ghost lb-btn--sm"><lucide-icon name="log-in" [size]="14" />Connexion</button>
+          </div>
+          <a href="#" class="lb-forgot">Mot de passe oublié</a>
+        </form>
+      </section>
+
+      <!-- Communauté active : membres en ligne (aperçu, 8 colonnes) -->
+      <section class="lb-tile lb-tile--members lb-panel">
+        <header class="lb-panel__h">
+          <lucide-icon name="users" [size]="22" class="lb-h-ico" />Membres en ligne
+          <span class="lb-members__count">{{ connected }} actifs</span>
+        </header>
+        <div class="lb-panel__b">
+          <ul class="lb-members__row">
+            @for (m of onlinePreview; track m.pseudo) {
+              <li>
+                <a href="#" class="lb-avatar">
+                  <span class="lb-avatar__ph" [class.is-f]="m.sex === 'f'">{{ avatarInitials(m.pseudo) }}</span>
+                  <span class="lb-avatar__name">{{ m.pseudo }}</span>
+                </a>
+              </li>
+            }
+          </ul>
+          <a routerLink="/membres" class="lb-arrow lb-members__all"><lucide-icon name="chevron-right" [size]="15" />Voir les {{ connected }} membres en ligne</a>
+        </div>
+      </section>
+
+      <!-- Preuve sociale : la communauté (statistiques, 4 colonnes) -->
+      <section class="lb-tile lb-tile--stats lb-panel">
+        <header class="lb-panel__h"><lucide-icon name="users" [size]="22" class="lb-h-ico" />La communauté</header>
+        <div class="lb-panel__b">
+          <p class="lb-bignum">{{ activeMembers | number }} <span>membres actifs annoncés</span></p>
+          <ul class="lb-links">
+            <li><a routerLink="/recherche" class="lb-arrow"><lucide-icon name="chevron-right" [size]="15" />Explorer l'annuaire</a></li>
+            <li><a routerLink="/recherche" class="lb-arrow"><lucide-icon name="chevron-right" [size]="15" />Les plus belles fiches</a></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Retrouvez-les sur le site (vignettes) — tertiaire -->
+      <section class="lb-tile lb-tile--feat lb-tile--muted lb-panel lb-featured">
+        <header class="lb-panel__h"><lucide-icon name="sparkles" [size]="22" class="lb-h-ico" />Retrouvez-les sur le site !</header>
+        <div class="lb-panel__b lb-featured__grid">
+          @for (f of featured; track f.pseudo) {
+            <figure class="lb-thumb">
+              <span class="lb-thumb__ph" [class.is-f]="f.sex === 'f'">{{ initial(f.pseudo) }}</span>
+              <figcaption>{{ f.pseudo }}</figcaption>
+            </figure>
+          }
+        </div>
+      </section>
+
+      <!-- Le forum — tertiaire -->
+      <section class="lb-tile lb-tile--forum lb-tile--muted lb-panel lb-forum">
+        <header class="lb-panel__h"><lucide-icon name="message-square" [size]="22" class="lb-h-ico" />Le forum</header>
+        <div class="lb-panel__b">
+          <p class="lb-forum__lead">Derniers messages postés sur le forum</p>
+          <ul class="lb-forum__list">
+            @for (t of forumTopics; track t.title) {
+              <li>
+                <span class="lb-forum__date">{{ t.date }}</span>
+                <a href="#" class="lb-forum__title">{{ t.title }}</a>
+                <span class="lb-forum__author">{{ t.author }}</span>
+              </li>
+            }
+          </ul>
+          <div class="lb-forum__foot">
+            <span class="lb-count">{{ forumMessages }} messages</span>
+            <a href="#" class="lb-arrow"><lucide-icon name="chevron-right" [size]="15" />Accéder au forum</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Album photo — tertiaire -->
+      <section class="lb-tile lb-tile--album lb-tile--muted lb-panel">
+        <header class="lb-panel__h"><lucide-icon name="images" [size]="22" class="lb-h-ico" />Album photo</header>
+        <div class="lb-panel__b">
+          <div class="lb-albumcover"><span>IziContact</span></div>
+          <p class="lb-strong">Actuellement {{ photoProfiles | number }} fiches avec photo</p>
+          <ul class="lb-links">
+            <li><a href="#" class="lb-arrow"><lucide-icon name="chevron-right" [size]="15" />L'album complet</a></li>
+            <li><a href="#" class="lb-arrow"><lucide-icon name="chevron-right" [size]="15" />Best of photos</a></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Petites annonces — tertiaire -->
+      <section class="lb-tile lb-tile--ads lb-tile--muted lb-panel">
+        <header class="lb-panel__h"><lucide-icon name="megaphone" [size]="22" class="lb-h-ico" />Petites Annonces</header>
+        <div class="lb-panel__b">
+          <p class="lb-muted">
+            Profitez de la rapidité et de la simplicité de cette rubrique pour
+            communiquer, rencontrer, partager, rechercher…
+          </p>
+          <p class="lb-bignum">{{ classifieds | number }} <span>annonces consultables</span></p>
+          <ul class="lb-links">
+            <li><a href="#" class="lb-arrow"><lucide-icon name="chevron-right" [size]="15" />Consulter les annonces</a></li>
+            <li><a href="#" class="lb-arrow"><lucide-icon name="chevron-right" [size]="15" />Déposer vos annonces</a></li>
+            <li><a href="#" class="lb-arrow"><lucide-icon name="chevron-right" [size]="15" />Gérer vos annonces</a></li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+

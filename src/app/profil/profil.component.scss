@@ -1,0 +1,452 @@
+/* =========================================================
+   Page Mon Profil — identité (colonne latérale, sticky) + contenu.
+   Hiérarchie : qui je suis (gauche) → inciter à compléter (action)
+   → sections de contenu groupées par fonction. Design éditorial.
+   ========================================================= */
+:host {
+  display: block;
+  padding-bottom: var(--space-6);
+}
+
+.pf {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+/* ===================== Identité ===================== */
+.pf-id {
+  position: sticky;
+  top: var(--space-4);
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-6) var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.pf-id__avatarwrap {
+  position: relative;
+  margin-bottom: var(--space-4);
+}
+.pf-id__avatar {
+  display: grid;
+  place-items: center;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  color: var(--lb-male);
+  font-family: var(--font-brand);
+  font-size: 2.4rem;
+  font-weight: 700;
+}
+.pf-id__avatar.is-f {
+  color: var(--lb-female);
+}
+.pf-id__status {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  border: 2px solid var(--surface);
+}
+.pf-id__status.is-online {
+  color: var(--on-accent);
+  background: var(--success);
+}
+.pf-id__status.is-offline {
+  color: var(--muted);
+  background: var(--bg-elev-2);
+}
+.pf-id__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--space-2);
+}
+.pf-id__name {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.pf-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent-strong);
+  background: var(--accent-weak);
+  border-radius: var(--radius-pill);
+}
+.pf-badge lucide-icon {
+  color: var(--accent);
+}
+.pf-id__meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: var(--space-2) 0 var(--space-1);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.pf-id__meta lucide-icon,
+.pf-id__since lucide-icon {
+  color: var(--muted);
+  margin-right: 3px;
+}
+.pf-id__sep {
+  color: var(--border-strong);
+}
+.pf-id__since {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0 var(--space-5);
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.pf-id__edit {
+  margin-bottom: var(--space-4);
+}
+
+/* Interrupteur de présence */
+.pf-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0;
+  margin-bottom: var(--space-5);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+.pf-toggle__track {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  flex: none;
+  border-radius: var(--radius-pill);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border-strong);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.pf-toggle__track.is-on {
+  background: var(--success);
+  border-color: var(--success);
+}
+.pf-toggle__knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--surface);
+  transition: transform 0.2s ease;
+}
+.pf-toggle__track.is-on .pf-toggle__knob {
+  transform: translateX(18px);
+}
+.pf-toggle:focus-visible .pf-toggle__track {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Stats rapides */
+.pf-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  width: 100%;
+  margin: 0;
+  padding: var(--space-4) 0 0;
+  list-style: none;
+  border-top: 1px solid var(--border);
+}
+.pf-stats li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.pf-stats lucide-icon {
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+.pf-stats strong {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--text);
+}
+.pf-stats span {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+/* ===================== Contenu ===================== */
+.pf-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* Complétude */
+.pf-complete {
+  padding: var(--space-5);
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--border));
+  border-radius: var(--radius-lg);
+}
+.pf-complete__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.pf-complete__title {
+  margin: 0 0 2px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-strong);
+}
+.pf-complete .lb-muted {
+  margin: 0;
+  font-size: 0.88rem;
+}
+.pf-complete__pct {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+  line-height: 1;
+}
+.pf-bar {
+  height: 8px;
+  margin: var(--space-4) 0;
+  border-radius: var(--radius-pill);
+  background: var(--bg-elev-2);
+  overflow: hidden;
+}
+.pf-bar__fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: inherit;
+  transition: width 0.3s ease;
+}
+.pf-checklist {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pf-checklist li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.pf-checklist li lucide-icon {
+  color: var(--border-strong);
+  flex: none;
+}
+.pf-checklist li.is-done {
+  color: var(--text);
+}
+.pf-checklist li.is-done lucide-icon {
+  color: var(--success);
+}
+.pf-complete__cta {
+  margin-top: var(--space-4);
+}
+
+/* Sections de contenu */
+.pf-section {
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.pf-section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+.pf-section__title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--primary-strong);
+}
+.pf-edit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.pf-edit:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.pf-tagline {
+  margin: 0 0 var(--space-3);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.pf-bio {
+  margin: 0;
+  max-width: 65ch;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* Puces (préférences / intérêts) */
+.pf-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pf-chip {
+  padding: 5px 12px;
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+}
+.pf-chip--accent {
+  color: var(--accent-strong);
+  background: var(--accent-weak);
+  border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
+  font-weight: 600;
+}
+
+/* Photos */
+.pf-photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pf-photo {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.pf-photo__ph {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-elev-2);
+  color: var(--muted);
+  font-family: var(--font-brand);
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+.pf-photo--cover {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+.pf-photo__tag {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  padding: 2px 8px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--on-accent);
+  background: var(--accent);
+  border-radius: var(--radius-pill);
+}
+.pf-photo--add {
+  border-style: dashed;
+  border-color: var(--border-strong);
+}
+.pf-photo--add button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.78rem;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.pf-photo--add button:hover {
+  color: var(--accent);
+  background: var(--accent-weak);
+}
+
+/* ===================== Responsive ===================== */
+@media (max-width: 880px) {
+  .pf {
+    grid-template-columns: 1fr;
+  }
+  .pf-id {
+    position: static;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf-bar__fill,
+  .pf-toggle__knob,
+  .pf-toggle__track {
+    transition: none;
+  }
+}

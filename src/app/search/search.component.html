@@ -1,0 +1,141 @@
+<section class="sr" [class.sr--collapsed]="!filtersOpen()">
+  <!-- ======================= Filtres (panneau latéral) ======================= -->
+  <aside class="sr-filters" [class.is-collapsed]="!filtersOpen()" aria-label="Filtres de recherche">
+    <div class="sr-filters__head">
+      <h2 class="sr-filters__title"><lucide-icon name="sliders-horizontal" [size]="16" />Filtres</h2>
+      <button
+        type="button"
+        class="sr-icon-btn"
+        (click)="toggleFilters()"
+        [attr.aria-expanded]="filtersOpen()"
+        aria-controls="sr-filters-body"
+        aria-label="Réduire les filtres"
+      >
+        <lucide-icon name="chevron-left" [size]="16" />
+      </button>
+    </div>
+
+    <div class="sr-filters__body" id="sr-filters-body">
+      <!-- Je cherche : boutons segmentés -->
+      <div class="sr-group">
+        <span class="sr-group__label">Je cherche</span>
+        <div class="sr-segment" role="group" aria-label="Je cherche">
+          @for (o of sexeOptions; track o.value) {
+            <button
+              type="button"
+              class="sr-segment__btn"
+              [class.is-on]="sexe() === o.value"
+              [attr.aria-pressed]="sexe() === o.value"
+              (click)="setSexe(o.value)"
+            >{{ o.label }}</button>
+          }
+        </div>
+      </div>
+
+      <!-- Âge -->
+      <div class="sr-group">
+        <span class="sr-group__label">Âge</span>
+        <div class="sr-range">
+          <label class="lb-field">
+            <span>De</span>
+            <input type="number" min="18" max="99" [value]="ageMin()" (input)="onNumber(ageMin, $event)" aria-label="Âge minimum" />
+          </label>
+          <span class="sr-range__sep" aria-hidden="true">–</span>
+          <label class="lb-field">
+            <span>À</span>
+            <input type="number" min="18" max="99" [value]="ageMax()" (input)="onNumber(ageMax, $event)" aria-label="Âge maximum" />
+          </label>
+        </div>
+      </div>
+
+      <!-- Zone géographique -->
+      <label class="lb-field">
+        <span>Zone géographique</span>
+        <select [value]="zone()" (change)="setZone($any($event.target).value)">
+          @for (z of zoneOptions; track z) { <option [value]="z">{{ z }}</option> }
+        </select>
+      </label>
+
+      <!-- Ville ou département -->
+      <label class="lb-field">
+        <span>Ville ou département</span>
+        <input type="text" placeholder="Ex. Lyon, 69…" [value]="city()" (input)="city.set($any($event.target).value)" />
+      </label>
+
+      <!-- Options -->
+      <div class="sr-checks">
+        <label class="lb-check">
+          <input type="checkbox" [checked]="withPhoto()" (change)="withPhoto.set($any($event.target).checked)" /> Avec photo uniquement
+        </label>
+        <label class="lb-check">
+          <input type="checkbox" [checked]="onlineOnly()" (change)="onlineOnly.set($any($event.target).checked)" /> En ligne maintenant
+        </label>
+      </div>
+
+      <button type="button" class="lb-btn lb-btn--ghost lb-btn--sm sr-reset" (click)="resetFilters()">
+        <lucide-icon name="refresh-cw" [size]="14" />Réinitialiser
+      </button>
+    </div>
+  </aside>
+
+  <!-- Bouton de réouverture (visible uniquement quand les filtres sont repliés) -->
+  <button type="button" class="sr-reopen" (click)="toggleFilters()" aria-label="Afficher les filtres">
+    <lucide-icon name="sliders-horizontal" [size]="16" />
+    <span>Filtres</span>
+  </button>
+
+  <!-- ======================= Résultats (zone dominante) ======================= -->
+  <main class="sr-results">
+    <header class="sr-results__bar">
+      <p class="sr-results__count">
+        <strong>{{ resultCount() }}</strong> membre{{ resultCount() > 1 ? 's' : '' }} trouvé{{ resultCount() > 1 ? 's' : '' }}
+        <span class="sr-results__online">· {{ onlineCount() }} en ligne</span>
+      </p>
+      <label class="sr-sort">
+        <span class="sr-sort__label">Trier</span>
+        <select [value]="tri()" (change)="setTri($any($event.target).value)">
+          @for (t of triOptions; track t.value) { <option [value]="t.value">{{ t.label }}</option> }
+        </select>
+      </label>
+    </header>
+
+    @if (results().length) {
+      <ul class="sr-grid">
+        @for (m of results(); track m.pseudo) {
+          <li class="sr-card">
+            <div class="sr-card__media">
+              <span class="sr-card__ph" [class.is-f]="m.sex === 'f'" [class.is-nophoto]="!m.hasPhoto">
+                @if (m.hasPhoto) { {{ initials(m.pseudo) }} } @else { <lucide-icon name="user" [size]="24" /> }
+              </span>
+              @if (m.online) { <span class="sr-card__dot" title="En ligne"></span> }
+            </div>
+            <div class="sr-card__body">
+              <a routerLink="/profil" [queryParams]="{ membre: m.pseudo }" class="sr-card__name">{{ m.pseudo }}</a>
+              <p class="sr-card__meta">{{ m.age }} ans · {{ m.city }} <span class="sr-card__dept">({{ m.dept }})</span></p>
+              <div class="sr-card__actions">
+                <a
+                  routerLink="/courrier"
+                  [queryParams]="{ avec: m.pseudo, mode: 'tchat', sexe: m.sex }"
+                  class="lb-btn lb-btn--sm lb-btn--auto"
+                ><lucide-icon name="message-circle" [size]="14" />Tchater</a>
+                <a
+                  routerLink="/courrier"
+                  [queryParams]="{ avec: m.pseudo, mode: 'courrier', sexe: m.sex }"
+                  class="lb-btn lb-btn--ghost lb-btn--sm lb-btn--auto"
+                ><lucide-icon name="mail" [size]="14" />Courrier</a>
+              </div>
+              <a routerLink="/profil" [queryParams]="{ membre: m.pseudo }" class="sr-card__link">Voir la fiche</a>
+            </div>
+          </li>
+        }
+      </ul>
+    } @else {
+      <div class="sr-empty">
+        <lucide-icon name="search" [size]="28" />
+        <p class="sr-empty__title">Aucun membre ne correspond</p>
+        <p class="lb-muted">Élargissez vos critères — tranche d'âge, zone ou options.</p>
+        <button type="button" class="lb-btn lb-btn--ghost lb-btn--sm lb-btn--auto" (click)="resetFilters()">Réinitialiser les filtres</button>
+      </div>
+    }
+  </main>
+</section>

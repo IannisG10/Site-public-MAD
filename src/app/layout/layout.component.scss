@@ -1,0 +1,523 @@
+/* =========================================================
+   Coquille partagée (header, nav, messagerie) — styles GLOBAUX.
+   Fournit le conteneur `.lb`, la base des liens/icônes et le design system
+   de surface commun à toutes les pages routées. Design éditorial : neutres
+   chauds, accent indigo unique, plat, Space Grotesk + IBM Plex Mono.
+   ========================================================= */
+.lb {
+  /* data-colors sobres pour le genre (fonctionnels, désaturés) ; hérités par
+     les pages enfants via les custom properties. */
+  --lb-male: #5b6cc0;
+  --lb-female: #b5567f;
+
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.lb a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.lb a:hover {
+  color: var(--accent-strong);
+  text-decoration: underline;
+}
+
+/* ===================== Icônes (Lucide) ===================== */
+.lb lucide-icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+  flex: none;
+}
+/* icône de titre de section : accent indigo pour une touche de couleur vivante */
+.lb-h-ico {
+  color: var(--accent);
+}
+
+/* ===================== Header ===================== */
+.lb-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  padding: var(--space-6) 0 var(--space-4);
+}
+.lb-logo {
+  font-family: var(--font-brand);
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text) !important;
+  line-height: 1;
+}
+.lb-logo:hover {
+  text-decoration: none;
+}
+.lb-logo__accent {
+  color: var(--accent);
+}
+.lb-headmeta {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.lb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--bg-elev);
+}
+.lb-chip lucide-icon {
+  color: var(--accent);
+}
+.lb-chip b {
+  color: var(--text);
+}
+
+/* ===================== Navigation ===================== */
+.lb-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 0;
+  margin-bottom: var(--space-6);
+}
+.lb-nav__item {
+  position: relative;
+  padding: var(--space-4) 0;
+  color: var(--muted) !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.lb-nav__item:hover {
+  color: var(--text) !important;
+  text-decoration: none;
+}
+.lb-nav__item.is-active {
+  color: var(--text) !important;
+  border-bottom-color: var(--accent);
+}
+
+/* ===================== Primitives partagées (design system) =====================
+   Boutons, champs et helpers de texte, globaux pour que toutes les pages
+   (accueil, recherche, …) partagent exactement le même vocabulaire visuel. */
+
+/* Boutons : hiérarchie d'actions claire (un seul bouton « fort »). */
+.lb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.6rem 1.25rem;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--on-accent);
+  background: var(--accent);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.lb-btn,
+.lb-btn:hover {
+  text-decoration: none;
+}
+.lb-btn:hover {
+  background: var(--accent-strong);
+}
+.lb-btn--sm {
+  padding: 0.45rem 1rem;
+}
+.lb-btn--primary {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+}
+.lb-btn--lg {
+  padding: 0.9rem 1.5rem;
+  font-size: 1rem;
+}
+.lb-btn--secondary {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  color: var(--accent);
+  background: transparent;
+  border-color: var(--accent);
+}
+.lb-btn--secondary:hover {
+  color: var(--on-accent);
+  background: var(--accent);
+}
+.lb-btn--ghost {
+  color: var(--text);
+  background: transparent;
+  border-color: var(--border-strong);
+}
+.lb-btn--ghost:hover {
+  color: var(--text);
+  background: var(--bg-elev);
+  border-color: var(--text);
+}
+.lb-btn--auto {
+  width: auto;
+}
+
+/* Champs de formulaire */
+.lb-field {
+  display: block;
+  margin-bottom: var(--space-4);
+}
+.lb-field > span {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.lb-field select,
+.lb-field input[type="text"],
+.lb-field input[type="number"] {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+.lb-field select {
+  appearance: none;
+  cursor: pointer;
+}
+.lb-field select:focus-visible,
+.lb-field input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+/* Cases à cocher */
+.lb-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+/* Helpers de texte */
+.lb-muted {
+  color: var(--muted);
+}
+.lb-strong {
+  color: var(--text);
+  font-weight: 600;
+}
+.lb-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+/* ===================== Dialogue (messagerie temps réel) =====================
+   Fenêtre flottante type messagerie, ancrée en bas à droite. Une légère
+   élévation la détache de la page (seule entorse assumée au style plat :
+   c'est un calque flottant, pas une carte de contenu). */
+.lb-chip--btn {
+  cursor: pointer;
+  font-family: var(--font-mono);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.lb-chip--btn:hover {
+  color: var(--text);
+  border-color: var(--text);
+  background: var(--surface);
+}
+.lb-chip--btn[aria-expanded="true"] {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.lb-dialog {
+  position: fixed;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  max-width: calc(100vw - var(--space-5) * 2);
+  height: 70vh;
+  max-height: 560px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 48px -12px rgba(23, 23, 30, 0.35);
+  overflow: hidden;
+  animation: lb-dialog-in 0.24s ease;
+}
+@keyframes lb-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* En-tête : interlocuteur + statut + fermeture */
+.lb-dialog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elev);
+}
+.lb-dialog__peer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.lb-dialog__avatar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  color: var(--lb-male);
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.lb-dialog__avatar.is-f {
+  color: var(--lb-female);
+}
+.lb-dialog__who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.lb-dialog__name {
+  font-size: 0.92rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lb-dialog__status {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+.lb-dialog__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.lb-dialog__close:hover {
+  color: var(--text);
+  background: var(--surface);
+}
+
+/* Fil de la conversation : défile en interne, scrollbar fine */
+.lb-dialog__thread {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+.lb-dialog__thread::-webkit-scrollbar {
+  width: 6px;
+}
+.lb-dialog__thread::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-pill);
+}
+
+/* Bulles : destinataire à gauche (neutre), expéditeur à droite (accent) */
+.lb-msg {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 80%;
+}
+.lb-msg.is-me {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+.lb-msg__bubble {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  border-bottom-left-radius: 4px;
+  color: var(--text);
+  font-size: 0.88rem;
+  line-height: 1.4;
+  word-break: break-word;
+}
+.lb-msg.is-me .lb-msg__bubble {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 4px;
+}
+.lb-msg__time {
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--muted);
+}
+
+/* Indicateur de frappe : trois points animés */
+.lb-msg__bubble--typing {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  padding: 11px 13px;
+}
+.lb-msg__bubble--typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+  animation: lb-typing 1s infinite ease-in-out;
+}
+.lb-msg__bubble--typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.lb-msg__bubble--typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes lb-typing {
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+/* Zone de saisie */
+.lb-dialog__compose {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-top: 1px solid var(--border);
+  background: var(--bg-elev);
+}
+.lb-dialog__input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.lb-dialog__input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+.lb-dialog__send {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  color: var(--on-accent);
+  background: var(--accent);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+.lb-dialog__send:hover:not(:disabled) {
+  background: var(--accent-strong);
+}
+.lb-dialog__send:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-dialog {
+    animation: none;
+  }
+  .lb-msg__bubble--typing span {
+    animation: none;
+    opacity: 0.5;
+  }
+}
+
+/* Mobile : la fenêtre devient une feuille ancrée en bas, pleine largeur */
+@media (max-width: 640px) {
+  .lb-dialog {
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: auto;
+    max-width: none;
+    height: 85vh;
+    max-height: none;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .lb {
+    padding: 0 var(--space-4);
+  }
+}

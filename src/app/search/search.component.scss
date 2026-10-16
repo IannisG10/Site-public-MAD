@@ -1,0 +1,351 @@
+/* =========================================================
+   Page Recherche — résultats dominants + panneau de filtres latéral.
+   Même langage éditorial que le reste du site (neutres chauds, accent
+   indigo unique, plat, hairlines). Les primitives (boutons, champs,
+   checkboxes) viennent du design system global (layout).
+   ========================================================= */
+:host {
+  display: block;
+  padding-bottom: var(--space-6);
+}
+
+.sr {
+  display: grid;
+  grid-template-columns: 264px 1fr;
+  gap: var(--space-6);
+  align-items: start;
+  transition: grid-template-columns 0.28s ease;
+}
+/* Filtres repliés : la colonne disparaît, les résultats occupent tout. */
+.sr--collapsed {
+  grid-template-columns: 1fr;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sr {
+    transition: none;
+  }
+}
+
+/* ===================== Panneau de filtres ===================== */
+.sr-filters {
+  position: sticky;
+  top: var(--space-4);
+  align-self: start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+}
+.sr--collapsed .sr-filters {
+  display: none;
+}
+.sr-filters__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+.sr-filters__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--primary-strong);
+}
+.sr-filters__title lucide-icon {
+  color: var(--accent);
+}
+.sr-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.sr-icon-btn:hover {
+  color: var(--text);
+  border-color: var(--text);
+  background: var(--bg-elev);
+}
+
+.sr-group {
+  margin-bottom: var(--space-4);
+}
+.sr-group__label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Contrôle segmenté « Je cherche » */
+.sr-segment {
+  display: flex;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.sr-segment__btn {
+  flex: 1;
+  padding: 0.5rem 0.4rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--bg-elev);
+  border: none;
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.sr-segment__btn:last-child {
+  border-right: none;
+}
+.sr-segment__btn:hover {
+  color: var(--text);
+}
+.sr-segment__btn.is-on {
+  color: var(--on-accent);
+  background: var(--accent);
+}
+
+/* Tranche d'âge */
+.sr-range {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+.sr-range .lb-field {
+  margin-bottom: 0;
+  flex: 1;
+}
+.sr-range__sep {
+  padding-bottom: 0.6rem;
+  color: var(--muted);
+}
+
+.sr-checks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: var(--space-2) 0 var(--space-5);
+}
+.sr-reset {
+  width: 100%;
+}
+
+/* Bouton de réouverture des filtres (replié) */
+.sr-reopen {
+  display: none;
+}
+.sr--collapsed .sr-reopen {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: start;
+  padding: 0.5rem 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+.sr--collapsed .sr-reopen:hover {
+  border-color: var(--text);
+}
+.sr--collapsed .sr-reopen lucide-icon {
+  color: var(--accent);
+}
+
+/* ===================== Résultats ===================== */
+.sr-results {
+  min-width: 0;
+}
+.sr-results__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-5);
+  border-bottom: 1px solid var(--border);
+}
+.sr-results__count {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text);
+}
+.sr-results__count strong {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+.sr-results__online {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.sr-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.sr-sort__label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.sr-sort select {
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* Grille de fiches membres */
+.sr-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-5);
+}
+.sr-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.sr-card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+.sr-card__media {
+  position: relative;
+}
+.sr-card__ph {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  background: var(--bg-elev-2);
+  color: var(--lb-male);
+  font-family: var(--font-brand);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.sr-card__ph.is-f {
+  color: var(--lb-female);
+}
+.sr-card__ph.is-nophoto {
+  color: var(--muted);
+}
+.sr-card__dot {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--success);
+  border: 2px solid var(--surface);
+}
+.sr-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-4);
+}
+.sr-card__name {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text) !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sr-card__name:hover {
+  color: var(--accent) !important;
+}
+.sr-card__meta {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.sr-card__dept {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+.sr-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+.sr-card__link {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* État vide */
+.sr-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+  padding: var(--space-6) var(--space-5);
+  color: var(--muted);
+}
+.sr-empty lucide-icon {
+  color: var(--border-strong);
+  margin-bottom: var(--space-2);
+}
+.sr-empty__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.sr-empty .lb-btn {
+  margin-top: var(--space-3);
+}
+
+/* ===================== Responsive ===================== */
+@media (max-width: 960px) {
+  .sr,
+  .sr--collapsed {
+    grid-template-columns: 1fr;
+  }
+  .sr-filters {
+    position: static;
+  }
+}

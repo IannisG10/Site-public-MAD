@@ -1,0 +1,54 @@
+<section class="fo">
+  <!-- ======================= En-tête ======================= -->
+  <header class="fo-head">
+    <div class="fo-head__intro">
+      <h1 class="fo-head__title">Forum</h1>
+      <p class="fo-head__stats">
+        <strong>{{ topicCount() }}</strong> sujets · <strong>{{ messageCount() | number }}</strong> messages
+      </p>
+    </div>
+    <button type="button" class="lb-btn lb-btn--auto"><lucide-icon name="plus" [size]="16" />Nouveau sujet</button>
+  </header>
+
+  <!-- Catégories (filtre) -->
+  <div class="fo-cats" role="group" aria-label="Catégories">
+    @for (c of categories; track c) {
+      <button
+        type="button"
+        class="fo-cat"
+        [class.is-on]="activeCategory() === c"
+        [attr.aria-pressed]="activeCategory() === c"
+        (click)="setCategory(c)"
+      >{{ c }}</button>
+    }
+  </div>
+
+  <!-- ======================= Liste des sujets ======================= -->
+  <ul class="fo-list">
+    @for (t of filtered(); track t.id) {
+      <li class="fo-topic" [class.is-pinned]="t.pinned">
+        <span class="fo-topic__avatar" [class.is-f]="t.sex === 'f'">{{ initials(t.author) }}</span>
+
+        <div class="fo-topic__main">
+          <div class="fo-topic__titlerow">
+            @if (t.pinned) { <span class="fo-tag fo-tag--pin"><lucide-icon name="pin" [size]="12" />Épinglé</span> }
+            @if (t.hot) { <span class="fo-tag fo-tag--hot"><lucide-icon name="flame" [size]="12" />Populaire</span> }
+            <a href="#" class="fo-topic__title">{{ t.title }}</a>
+          </div>
+          <p class="fo-topic__meta">
+            par <span class="fo-topic__author">{{ t.author }}</span>
+            <span class="fo-chip">{{ t.category }}</span>
+            <span class="fo-topic__last">· dernier message {{ t.last }}</span>
+          </p>
+        </div>
+
+        <div class="fo-topic__counts">
+          <span class="fo-count"><lucide-icon name="message-square" [size]="14" /><b>{{ t.replies }}</b><span class="fo-count__lbl">réponses</span></span>
+          <span class="fo-count fo-count--muted"><lucide-icon name="eye" [size]="14" /><b>{{ t.views | number }}</b><span class="fo-count__lbl">vues</span></span>
+        </div>
+      </li>
+    } @empty {
+      <li class="fo-empty lb-muted">Aucun sujet dans cette catégorie pour l'instant.</li>
+    }
+  </ul>
+</section>

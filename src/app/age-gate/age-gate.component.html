@@ -1,0 +1,51 @@
+@if (status() !== 'verified') {
+  <div class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-title">
+    <div class="age-gate__panel">
+      @if (status() === 'denied') {
+        <p class="age-gate__eyebrow age-gate__eyebrow--deny">Accès refusé</p>
+        <h1 id="age-gate-title">Désolé</h1>
+        <p class="age-gate__lead">
+          Ce site est strictement réservé aux personnes majeures
+          ({{ minAge }}&nbsp;ans et plus).
+        </p>
+        <button type="button" class="age-gate__btn age-gate__btn--ghost" (click)="retry()">
+          Recommencer
+        </button>
+      } @else {
+        <p class="age-gate__eyebrow">Vérification d'âge</p>
+        <h1 id="age-gate-title">Confirmez votre âge</h1>
+        <p class="age-gate__lead">
+          Ce site est réservé aux personnes majeures. Sélectionnez votre année
+          de naissance, puis confirmez.
+        </p>
+
+        <div class="age-gate__field">
+          <label for="birth-year">Année de naissance</label>
+          <select id="birth-year" (change)="onSelect($event)">
+            <option value="" selected disabled>— Sélectionnez —</option>
+            @for (year of years; track year) {
+              <option [value]="year">{{ year }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="age-gate__choices">
+          <button
+            type="button"
+            class="age-gate__btn age-gate__btn--primary"
+            [disabled]="selectedYear() === null"
+            (click)="over18()">
+            J'ai plus de {{ minAge }}&nbsp;ans
+          </button>
+          <button type="button" class="age-gate__btn age-gate__btn--deny" (click)="under18()">
+            J'ai moins de {{ minAge }}&nbsp;ans
+          </button>
+        </div>
+
+        <p class="age-gate__note">
+          En entrant, vous confirmez avoir l'âge légal requis pour consulter ce site.
+        </p>
+      }
+    </div>
+  </div>
+}

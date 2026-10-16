@@ -1,0 +1,91 @@
+<section class="ct" [class.ct--thread-open]="mobileThread()">
+  <!-- ======================= Liste des conversations ======================= -->
+  <aside class="ct-list" aria-label="Conversations">
+    <header class="ct-list__head">
+      <h1 class="ct-list__title">Mon courrier</h1>
+      <button type="button" class="lb-btn lb-btn--sm lb-btn--auto"><lucide-icon name="pencil" [size]="15" />Nouveau</button>
+    </header>
+
+    <div class="ct-tabs" role="tablist">
+      <button type="button" class="ct-tab" role="tab" [class.is-on]="onglet() === 'all'" [attr.aria-selected]="onglet() === 'all'" (click)="setOnglet('all')">Tous</button>
+      <button type="button" class="ct-tab" role="tab" [class.is-on]="onglet() === 'unread'" [attr.aria-selected]="onglet() === 'unread'" (click)="setOnglet('unread')">
+        Non lus @if (unreadCount()) { <span class="ct-tab__badge">{{ unreadCount() }}</span> }
+      </button>
+    </div>
+
+    <ul class="ct-convs">
+      @for (c of filtered(); track c.id) {
+        <li>
+          <button
+            type="button"
+            class="ct-conv"
+            [class.is-active]="c.id === selectedId()"
+            [class.is-unread]="c.unread"
+            (click)="select(c.id)"
+          >
+            <span class="ct-conv__avatar" [class.is-f]="c.sex === 'f'">
+              {{ initials(c.peer) }}
+              @if (c.online) { <span class="ct-conv__dot" title="En ligne"></span> }
+            </span>
+            <span class="ct-conv__main">
+              <span class="ct-conv__top">
+                <b class="ct-conv__name">{{ c.peer }}</b>
+                <span class="ct-conv__time">{{ c.time }}</span>
+              </span>
+              <span class="ct-conv__preview">{{ c.preview }}</span>
+            </span>
+            @if (c.unread) { <span class="ct-conv__unread" aria-label="Non lu"></span> }
+          </button>
+        </li>
+      } @empty {
+        <li class="ct-convs__empty lb-muted">Aucun message ici.</li>
+      }
+    </ul>
+  </aside>
+
+  <!-- ======================= Fil de la conversation ======================= -->
+  <main class="ct-thread">
+    @if (selected(); as conv) {
+      <header class="ct-thread__head">
+        <button type="button" class="ct-back" (click)="backToList()" aria-label="Retour aux conversations">
+          <lucide-icon name="chevron-left" [size]="18" />
+        </button>
+        <span class="ct-thread__avatar" [class.is-f]="conv.sex === 'f'">{{ initials(conv.peer) }}</span>
+        <span class="ct-thread__who">
+          <b class="ct-thread__name">{{ conv.peer }}</b>
+          <span class="ct-thread__status">{{ conv.online ? 'En ligne' : 'Hors ligne' }}</span>
+        </span>
+      </header>
+
+      <div class="ct-thread__body">
+        @for (m of conv.messages; track $index) {
+          <div class="lb-msg" [class.is-me]="m.from === 'me'">
+            <p class="lb-msg__bubble">{{ m.text }}</p>
+            <span class="lb-msg__time">{{ m.time }}</span>
+          </div>
+        }
+      </div>
+
+      <form class="ct-compose" (submit)="$event.preventDefault(); send()">
+        <input
+          type="text"
+          class="ct-compose__input"
+          [placeholder]="mode() === 'courrier' ? 'Écrivez votre courrier…' : 'Écrivez votre message…'"
+          [value]="draft()"
+          (input)="draft.set($any($event.target).value)"
+          autocomplete="off"
+          aria-label="Votre message"
+        />
+        <button type="submit" class="ct-compose__send" [disabled]="!draft().trim()" aria-label="Envoyer">
+          <lucide-icon name="send" [size]="16" />
+        </button>
+      </form>
+    } @else {
+      <div class="ct-thread__empty">
+        <lucide-icon name="mail" [size]="30" />
+        <p class="ct-thread__emptytitle">Sélectionnez une conversation</p>
+        <p class="lb-muted">Choisissez un message à gauche pour l'afficher ici.</p>
+      </div>
+    }
+  </main>
+</section>

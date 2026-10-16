@@ -1,0 +1,102 @@
+<div class="lb">
+  <!-- ===================== Header ===================== -->
+  <header class="lb-top">
+    <a routerLink="/" class="lb-logo">Izi<span class="lb-logo__accent">Contact</span></a>
+
+    <div class="lb-headmeta">
+      <span class="lb-chip"><lucide-icon name="users" [size]="14" /><b>{{ connected }}</b> en ligne</span>
+      <button
+        type="button"
+        class="lb-chip lb-chip--btn"
+        (click)="toggleDialogue()"
+        [attr.aria-expanded]="dialogueOpen()"
+        aria-haspopup="dialog"
+      >
+        <lucide-icon name="message-square" [size]="14" /><b>{{ unreadDialogues() }}</b>
+        {{ unreadDialogues() > 1 ? 'dialogues' : 'dialogue' }}
+      </button>
+      <span class="lb-chip"><lucide-icon name="heart" [size]="14" /><b>{{ onlineContacts }}</b> contacts</span>
+    </div>
+  </header>
+
+  <!-- ===================== Navigation ===================== -->
+  <nav class="lb-nav">
+    <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" class="lb-nav__item">Accueil</a>
+    <a routerLink="/recherche" routerLinkActive="is-active" class="lb-nav__item">Recherche</a>
+    <a routerLink="/membres" routerLinkActive="is-active" class="lb-nav__item">Membres online</a>
+    <a routerLink="/courrier" routerLinkActive="is-active" class="lb-nav__item">Mon courrier</a>
+    <a routerLink="/forum" routerLinkActive="is-active" class="lb-nav__item">Forum</a>
+    <a routerLink="/profil" routerLinkActive="is-active" class="lb-nav__item">Mon Profil</a>
+    <a routerLink="/forfait" routerLinkActive="is-active" class="lb-nav__item">Mon forfait</a>
+  </nav>
+
+  <!-- ===================== Page ===================== -->
+  <router-outlet />
+</div>
+
+<!-- ===================== Dialogue (messagerie temps réel) ===================== -->
+@if (dialogueOpen()) {
+  <div
+    class="lb-dialog"
+    role="dialog"
+    [attr.aria-label]="'Dialogue avec ' + peerName"
+    (keydown.escape)="closeDialogue()"
+  >
+    <header class="lb-dialog__head">
+      <span class="lb-dialog__peer">
+        <span class="lb-dialog__avatar" [class.is-f]="peerSex === 'f'">{{ initial(peerName) }}</span>
+        <span class="lb-dialog__who">
+          <b class="lb-dialog__name">{{ peerName }}</b>
+          <span class="lb-dialog__status" aria-live="polite">
+            @if (peerTyping()) { en train d’écrire… } @else { en ligne }
+          </span>
+        </span>
+      </span>
+      <button
+        type="button"
+        class="lb-dialog__close"
+        (click)="closeDialogue()"
+        aria-label="Fermer le dialogue"
+      >
+        <lucide-icon name="x" [size]="18" />
+      </button>
+    </header>
+
+    <div class="lb-dialog__thread" #thread>
+      @for (m of messages(); track $index) {
+        <div class="lb-msg" [class.is-me]="m.from === 'me'">
+          <p class="lb-msg__bubble">{{ m.text }}</p>
+          <span class="lb-msg__time">{{ m.time }}</span>
+        </div>
+      }
+      @if (peerTyping()) {
+        <div class="lb-msg lb-msg--typing">
+          <p class="lb-msg__bubble lb-msg__bubble--typing" [attr.aria-label]="peerName + ' est en train d’écrire'">
+            <span></span><span></span><span></span>
+          </p>
+        </div>
+      }
+    </div>
+
+    <form class="lb-dialog__compose" (submit)="$event.preventDefault(); sendMessage()">
+      <input
+        #chatInput
+        type="text"
+        class="lb-dialog__input"
+        placeholder="Écrivez votre message…"
+        [value]="draft()"
+        (input)="draft.set($any($event.target).value)"
+        autocomplete="off"
+        aria-label="Votre message"
+      />
+      <button
+        type="submit"
+        class="lb-dialog__send"
+        [disabled]="!draft().trim()"
+        aria-label="Envoyer le message"
+      >
+        <lucide-icon name="send" [size]="16" />
+      </button>
+    </form>
+  </div>
+}
