@@ -1,0 +1,34 @@
+# Node modules (réinstallés dans le container)
+node_modules/
+
+# Build Angular (recompilé dans le container)
+dist/
+
+# Cache Angular CLI
+.angular/
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+npm-debug.log*
+yarn-error.log
+
+# IDE / éditeurs
+.vscode/
+.idea/
+
+# Coverage / tests
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Screenshots et fichiers media non nécessaires
+"Screenshot libertin"/
+
+# Fichiers de dev locaux
+_serve.log
